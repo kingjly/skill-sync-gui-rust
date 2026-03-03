@@ -1,48 +1,50 @@
 # skill-sync-gui-rust
 
-`skill-sync-gui-rust` 是 [skill-sync](https://github.com/kingjly/skill-sync) 的 GUI 桌面版实现。
+**[中文文档](./README_CN.md)**
 
-它将原项目的技能管理与多工具同步能力，封装为一个基于 Tauri 的本地桌面应用：前端使用 React + Vite，后端使用 Rust + Axum，并以内嵌服务方式运行。
+`skill-sync-gui-rust` is the desktop GUI edition of [skill-sync](https://github.com/kingjly/skill-sync).
 
-## 项目定位
+It packages the upstream skill management and multi-tool sync capabilities into a local desktop app built with Tauri: React + Vite on the frontend, Rust + Axum on the backend, running as an embedded local service.
 
-- 上游项目：`skill-sync`（Web 应用）
-- 本项目：`skill-sync-gui-rust`（跨平台桌面 GUI 应用）
-- 目标：用更直观的本地界面统一管理 AI 编程助手技能，并一键同步到多工具
+## Project Positioning
 
-## 主要功能
+- Upstream project: `skill-sync` (Web app)
+- This project: `skill-sync-gui-rust` (cross-platform desktop GUI app)
+- Goal: manage AI coding assistant skills in a unified local UI and sync them to multiple tools with one click
 
-- 统一技能仓库管理（创建、查看、删除、编辑技能文件）
-- 自动检测本机已安装的 AI 工具
-- 同步能力
-  - 单技能同步到单工具
-  - 单技能同步到全部工具
-  - 全部技能同步到单工具
-  - 全部技能同步到全部工具
-- 从工具侧导入技能到中心仓库
-  - 支持复制导入
-  - 支持符号链接导入与恢复
-- 合并能力
-  - 合并前预览
-  - 冲突识别
-  - 选择覆盖执行
-- 技能预览
-  - Markdown 渲染
-  - YAML frontmatter 解析
-- 应用设置
-  - 技能仓库路径
-  - 自动同步开关与间隔
-  - 主题（light/dark/system）
+## Key Features
 
-## 与上游 skill-sync 的核心差异
+- Unified skill repository management (create, view, delete, edit skill files)
+- Automatic detection of installed AI tools on the local machine
+- Sync capabilities
+  - Single skill to a single tool
+  - Single skill to all tools
+  - All skills to a single tool
+  - All skills to all tools
+- Import skills from tools into the central repository
+  - Copy-based import
+  - Symlink import and restore
+- Merge capabilities
+  - Pre-merge preview
+  - Conflict detection
+  - Selective overwrite execution
+- Skill preview
+  - Markdown rendering
+  - YAML frontmatter parsing
+- App settings
+  - Skill repository path
+  - Auto-sync toggle and interval
+  - Theme (light/dark/system)
 
-- 后端从 TypeScript 服务迁移为 Rust（Axum）
-- 通过 Tauri 打包为桌面应用，内嵌本地 API 服务（默认 `127.0.0.1:31337`）
-- 前后端随桌面应用统一启动，部署与分发更接近桌面软件使用习惯
+## Core Differences from Upstream skill-sync
 
-## 支持工具
+- Backend migrated from TypeScript services to Rust (Axum)
+- Packaged as a Tauri desktop app with an embedded local API service (default `127.0.0.1:31337`)
+- Frontend and backend start together with the desktop app, making distribution closer to native desktop software
 
-| 工具 | 类型 |
+## Supported Tools
+
+| Tool | Type |
 | --- | --- |
 | Claude Code | CLI |
 | Cursor | IDE |
@@ -50,55 +52,85 @@
 | Trae | IDE |
 | Kiro | IDE |
 | Gemini CLI | CLI |
-| GitHub Copilot | VS Code 扩展 |
+| GitHub Copilot | VS Code Extension |
 | OpenAI Codex | CLI |
 | Aider | CLI |
-| Continue | VS Code 扩展 |
-| Cline | VS Code 扩展 |
-| Roo Code | VS Code 扩展 |
-| Amazon Q | VS Code 扩展 |
+| Continue | VS Code Extension |
+| Cline | VS Code Extension |
+| Roo Code | VS Code Extension |
+| Amazon Q | VS Code Extension |
 | JetBrains AI | JetBrains |
 
-## 技术栈
+## Tech Stack
 
-- 桌面框架：Tauri 2
-- 后端：Rust、Axum、Tokio
-- 前端：React 18、TypeScript、Vite、Tailwind CSS
-- 状态与请求：Zustand、TanStack Query
-- Markdown：react-markdown、remark-gfm
+- Desktop framework: Tauri 2
+- Backend: Rust, Axum, Tokio
+- Frontend: React 18, TypeScript, Vite, Tailwind CSS
+- State and data fetching: Zustand, TanStack Query
+- Markdown: react-markdown, remark-gfm
 
-## 快速开始
+## Quick Start
 
-### 环境要求
+### Prerequisites
 
 - Node.js >= 20
 - npm
-- Rust stable（用于 Tauri 构建）
-- 对应平台的 Tauri 构建依赖
+- Rust stable (for Tauri builds)
+- Platform-specific Tauri build dependencies
 
-### 安装
+### Install
 
 ```bash
-git clone https://github.com/<your-username>/skill-sync-gui-rust.git
+git clone https://github.com/kingjly/skill-sync-gui-rust.git
 cd skill-sync-gui-rust
 npm install
 ```
 
-### 开发运行（桌面应用）
+### Run in Development (Desktop App)
 
 ```bash
 npm run tauri:dev
 ```
 
-### 构建发布包
+### Build Release Packages
 
 ```bash
 npm run tauri:build
 ```
 
-## 常用脚本
+### Build Windows Portable EXE
 
-根目录脚本：
+After building, the executable can be found at:
+
+```text
+src-tauri/target/release/skill-sync-gui-rust.exe
+```
+
+Create a portable ZIP package in PowerShell:
+
+```powershell
+npm run tauri:build
+New-Item -ItemType Directory -Force .\dist\portable | Out-Null
+Copy-Item .\src-tauri\target\release\skill-sync-gui-rust.exe .\dist\portable\
+Compress-Archive -Path .\dist\portable\* -DestinationPath .\dist\skill-sync-gui-rust-windows-portable.zip -Force
+```
+
+Notes:
+
+- This portable EXE mode is suitable for quick distribution and testing.
+- Runtime dependencies (WebView2 / VC++ runtime) are still required on the target machine.
+- For best compatibility with end users, installer packages are still recommended.
+
+### Publish Artifacts to GitHub Release
+
+Yes, these artifacts can be uploaded to GitHub Releases:
+
+- NSIS installer: `src-tauri/target/release/bundle/nsis/*-setup.exe`
+- MSI installer: `src-tauri/target/release/bundle/msi/*.msi`
+- Portable package: `dist/skill-sync-gui-rust-windows-portable.zip`
+
+
+Root scripts:
 
 ```bash
 npm run dev:web
@@ -108,7 +140,7 @@ npm run tauri:dev
 npm run tauri:build
 ```
 
-前端工作区（web）脚本：
+Web workspace scripts:
 
 ```bash
 npm run typecheck --workspace=web
@@ -116,16 +148,16 @@ npm run build --workspace=web
 npm run test:e2e --workspace=web
 ```
 
-## 项目结构
+## Project Structure
 
 ```text
 skill-sync-gui-rust/
-├─ src-tauri/                 # Tauri + Rust 后端
+├─ src-tauri/                 # Tauri + Rust backend
 │  ├─ src/
-│  │  ├─ backend/             # API、检测、同步、配置、仓库逻辑
-│  │  └─ main.rs              # 应用入口，启动内嵌 API 服务
-│  └─ tauri.conf.json         # Tauri 配置
-├─ web/                       # React 前端
+│  │  ├─ backend/             # API, detection, sync, config, repository logic
+│  │  └─ main.rs              # App entry and embedded API startup
+│  └─ tauri.conf.json         # Tauri config
+├─ web/                       # React frontend
 │  ├─ src/
 │  │  ├─ components/
 │  │  ├─ pages/
@@ -134,17 +166,17 @@ skill-sync-gui-rust/
 └─ package.json
 ```
 
-## API 概览
+## API Overview
 
-本地 API 路由前缀：`/api`
+Local API route prefix: `/api`
 
-- 健康检查：`GET /api/health`
-- 工具：`GET /api/tools`、`GET /api/tools/:id`
-- 技能：`GET/POST /api/skills`、`GET/DELETE /api/skills/:id`
-- 同步：`POST /api/sync/all` 及按技能/工具粒度同步接口
-- 合并：`GET /api/merge/preview/:toolId`、`POST /api/merge/execute`
-- 导入：`GET /api/import/tools-skills`、`POST /api/import/tool/:toolId/all` 等
+- Health: `GET /api/health`
+- Tools: `GET /api/tools`, `GET /api/tools/:id`
+- Skills: `GET/POST /api/skills`, `GET/DELETE /api/skills/:id`
+- Sync: `POST /api/sync/all` and skill/tool scoped sync endpoints
+- Merge: `GET /api/merge/preview/:toolId`, `POST /api/merge/execute`
+- Import: `GET /api/import/tools-skills`, `POST /api/import/tool/:toolId/all`, etc.
 
-## 致谢
+## Acknowledgements
 
-- 本项目基于 [kingjly/skill-sync](https://github.com/kingjly/skill-sync) 的设计思路与能力扩展为 GUI 桌面版。
+- This project extends the design and capabilities of [kingjly/skill-sync](https://github.com/kingjly/skill-sync) into a GUI desktop edition.
