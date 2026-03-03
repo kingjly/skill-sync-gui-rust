@@ -1,0 +1,22 @@
+{
+  "name": "skill-sync-gui-rust",
+  "version": "0.1.0",
+  "private": true,
+  "workspaces": [
+    "web"
+  ],
+  "scripts": {
+    "dev:web": "npm run dev --workspace=web -- --host 127.0.0.1 --port 1420",
+    "build:web": "npm run build --workspace=web",
+    "tauri:prepare": "cross-env VITE_API_BASE_URL=http://127.0.0.1:31337/api npm run build --workspace=web",
+    "tauri:dev": "tauri dev",
+    "tauri:build": "tauri build"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "^2.0.0",
+    "cross-env": "^7.0.3"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}
